@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hệ thống dự đoán thiên tai Việt Nam</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" rel="stylesheet"/>
+    <style>
+        #map { 
+            height: 90vh;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .prediction-card {
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary mb-3">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">Hệ thống dự đoán thiên tai Việt Nam</span>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Bản đồ -->
+            <div class="col-md-8">
+                <div id="map"></div>
+            </div>
+
+            <!-- Form và kết quả -->
+            <div class="col-md-4">
+                <!-- Form dự đoán -->
+                <div class="card prediction-card mb-3">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Thông tin dự đoán</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="predict-form">
+                            <div class="mb-3">
+                                <label class="form-label">Chọn tỉnh/thành phố</label>
+                                <select class="form-select" id="province" required>
+                                    <option value="">-- Chọn tỉnh/thành phố --</option>
+                                    <option value="angiang">An Giang</option>
+                                    <option value="bacgiang">Bắc Giang</option>
+                                    <option value="backan">Bắc Kạn</option>
+                                    <option value="baclieu">Bạc Liêu</option>
+                                    <option value="bacninh">Bắc Ninh</option>
+                                    <option value="bentre">Bến Tre</option>
+                                    <option value="binhdinh">Bình Định</option>
+                                    <option value="binhduong">Bình Dương</option>
+                                    <option value="binhphuoc">Bình Phước</option>
+                                    <option value="binhthuan">Bình Thuận</option>
+                                    <option value="camau">Cà Mau</option>
+                                    <option value="cantho">Cần Thơ</option>
+                                    <option value="caobang">Cao Bằng</option>
+                                    <option value="danang">Đà Nẵng</option>
+                                    <option value="daklak">Đắk Lắk</option>
+                                    <option value="daknong">Đắk Nông</option>
+                                    <option value="dienbien">Điện Biên</option>
+                                    <option value="dongnai">Đồng Nai</option>
+                                    <option value="dongthap">Đồng Tháp</option>
+                                    <option value="gialai">Gia Lai</option>
+                                    <option value="hagiang">Hà Giang</option>
+                                    <option value="hanam">Hà Nam</option>
+                                    <option value="hanoi">Hà Nội</option>
+                                    <option value="hatinh">Hà Tĩnh</option>
+                                    <option value="haiduong">Hải Dương</option>
+                                    <option value="haiphong">Hải Phòng</option>
+                                    <option value="haugiang">Hậu Giang</option>
+                                    <option value="hoabinh">Hòa Bình</option>
+                                    <option value="hungyen">Hưng Yên</option>
+                                    <option value="khanhhoa">Khánh Hòa</option>
+                                    <option value="kiengiang">Kiên Giang</option>
+                                    <option value="kontum">Kon Tum</option>
+                                    <option value="laichau">Lai Châu</option>
+                                    <option value="lamdong">Lâm Đồng</option>
+                                    <option value="langson">Lạng Sơn</option>
+                                    <option value="laocai">Lào Cai</option>
+                                    <option value="longan">Long An</option>
+                                    <option value="namdinh">Nam Định</option>
+                                    <option value="nghean">Nghệ An</option>
+                                    <option value="ninhbinh">Ninh Bình</option>
+                                    <option value="ninhthuan">Ninh Thuận</option>
+                                    <option value="phutho">Phú Thọ</option>
+                                    <option value="phuyen">Phú Yên</option>
+                                    <option value="quangbinh">Quảng Bình</option>
+                                    <option value="quangnam">Quảng Nam</option>
+                                    <option value="quangngai">Quảng Ngãi</option>
+                                    <option value="quangninh">Quảng Ninh</option>
+                                    <option value="quangtri">Quảng Trị</option>
+                                    <option value="soctrang">Sóc Trăng</option>
+                                    <option value="sonla">Sơn La</option>
+                                    <option value="tayninh">Tây Ninh</option>
+                                    <option value="thaibinh">Thái Bình</option>
+                                    <option value="thainguyen">Thái Nguyên</option>
+                                    <option value="thanhhoa">Thanh Hóa</option>
+                                    <option value="hue">Thừa Thiên Huế</option>
+                                    <option value="tiengiang">Tiền Giang</option>
+                                    <option value="hochiminh">TP. Hồ Chí Minh</option>
+                                    <option value="travinh">Trà Vinh</option>
+                                    <option value="tuyenquang">Tuyên Quang</option>
+                                    <option value="vinhlong">Vĩnh Long</option>
+                                    <option value="vinhphuc">Vĩnh Phúc</option>
+                                    <option value="yenbai">Yên Bái</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Chọn tháng</label>
+                                <select class="form-select" id="month" required>
+                                    <option value="">-- Chọn tháng --</option>
+                                    <option value="1">Tháng 1</option>
+                                    <option value="2">Tháng 2</option>
+                                    <option value="3">Tháng 3</option>
+                                    <option value="4">Tháng 4</option>
+                                    <option value="5">Tháng 5</option>
+                                    <option value="6">Tháng 6</option>
+                                    <option value="7">Tháng 7</option>
+                                    <option value="8">Tháng 8</option>
+                                    <option value="9">Tháng 9</option>
+                                    <option value="10">Tháng 10</option>
+                                    <option value="11">Tháng 11</option>
+                                    <option value="12">Tháng 12</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search"></i> Dự đoán
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                
+                <div id="result" class="d-none">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://kit.fontawesome.com/your-code.js"></script>
+    <script>
+        // Khởi tạo bản đồ
+        const map = L.map('map').setView([16.0, 106.0], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Xử lý form submit
+        document.getElementById('predict-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                province: document.getElementById('province').value,
+                month: document.getElementById('month').value
+            };
+
+            try {
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('result').classList.remove('d-none');
+                    document.getElementById('result').innerHTML = `
+                        <div class="card prediction-card">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="card-title mb-0">Kết quả dự đoán</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td>Random Forest:</td>
+                                            <td class="text-end">${data.random_forest_prediction.toFixed(2)} mm</td>
+                                        </tr>
+                                        <tr>
+                                            <td>XGBoost:</td>
+                                            <td class="text-end">${data.xgboost_prediction.toFixed(2)} mm</td>
+                                        </tr>
+                                        <tr class="table-primary">
+                                            <td><strong>Dự đoán trung bình:</strong></td>
+                                            <td class="text-end"><strong>${data.average_prediction.toFixed(2)} mm</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock"></i> 
+                                    Thời gian dự đoán: ${new Date(data.timestamp).toLocaleString()}
+                                </small>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').classList.remove('d-none');
+                document.getElementById('result').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Có lỗi xảy ra: ${error.message || 'Không thể kết nối với server'}
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
